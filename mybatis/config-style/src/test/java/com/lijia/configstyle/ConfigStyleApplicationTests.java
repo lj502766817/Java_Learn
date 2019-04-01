@@ -1,6 +1,5 @@
 package com.lijia.configstyle;
 
-import com.lijia.configstyle.jdbc.TargetDataSource;
 import com.lijia.configstyle.mapper.StudentMapper;
 import com.lijia.configstyle.model.Student;
 import org.junit.Test;
