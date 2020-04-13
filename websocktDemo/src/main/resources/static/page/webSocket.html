@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webSocket</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+    <div id="parent"></div>
+    <div>
+        <form id="form">
+            <input id="msg" name="msg">
+        </form>
+        <button id="send">send</button>
+    </div>
+</body>
+<script type="text/javascript">
+    var socket;
+    $(document).ready(function () {
+        console.log("页面ready:"+new Date());
+        if (typeof (WebSocket) == "undefined"){
+            alert("浏览器不支持WebSocket");
+        }else {
+            //建立连接
+            socket =  new WebSocket("ws://127.0.0.1:8081/webSocket/websocket/0001");
+            //open时间
+            socket.onopen = function () {
+                console.log("socket 已经打开");
+                socket.send("这是来自client的消息:"+location.href+new Date())
+            };
+            //获得消息
+            socket.onmessage = function (msg) {
+                var html = "<p>"+new Date()+"->这是来自server的消息:"+msg.data+"</p>";
+                $('#parent').append(html);
+            };
+            //关闭事件
+            socket.onclose = function (e) {
+                console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
+                console.log(e)
+            };
+            //错误事件
+            socket.onerror = function () {
+                alert("socket 发生错误");
+            };
+        }
+
+        $('#send').click(function () {
+            console.log("发送了消息");
+            $.ajax({
+                type: "POST",
+                url: "http://127.0.0.1:8081/webSocket/demo/pushToClient?uid=0001",
+                data: $('#form').serialize(),
+                success: function(msg){
+                    console.log(msg);
+                },
+                error: function (msg) {
+                    console.log(msg)
+                }
+            });
+        })
+    });
+</script>
+</html>
