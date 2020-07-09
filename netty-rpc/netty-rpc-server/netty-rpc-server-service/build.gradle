@@ -5,7 +5,11 @@ version '1.0-SNAPSHOT'
 archivesBaseName = 'netty-rpc-server-service'
 
 dependencies{
-    implementation 'io.netty:netty-all:4.1.50.Final'
+    implementation project(':netty-rpc-server-api')
+    implementation (
+            'io.netty:netty-all:4.1.50.Final',
+            'org.springframework:spring-context:4.3.27.RELEASE'
+    )
 }
 
 
