@@ -1,0 +1,4 @@
+rootProject.name = 'netty-rpc-server'
+
+include 'netty-rpc-server-api','netty-rpc-server-service'
+

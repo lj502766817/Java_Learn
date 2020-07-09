@@ -1,0 +1,14 @@
+
+group 'com.osiris.netty-rpc'
+version '1.0-SNAPSHOT'
+/* 子模块项目名，jar名 */
+archivesBaseName = 'netty-rpc-server-api'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://C:\\Users\\lijia\\.m2\\repository")
+        }
+    }
+}
+
