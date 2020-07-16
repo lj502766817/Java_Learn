@@ -6,6 +6,8 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
+import java.util.Date;
+
 /**
  * @author lijia at 2020-07-15
  * @Description zookeeper基本api
@@ -24,9 +26,12 @@ public class CuratorDemo {
         //启动了,并不一定连接成功
         curatorFramework.start();
         //阻塞直到连接成功,如果不调这个方法,假如网络不行或者其他原因,在没连上的时候去做crud会报错连接不上
+        System.out.println("连接启动"+new Date());
         curatorFramework.blockUntilConnected();
+        System.out.println("成功连到zookeeper"+new Date());
 //        createData(curatorFramework);
         updateData(curatorFramework);
+//        deleteData(curatorFramework);
     }
 
     private static void createData(CuratorFramework curatorFramework) throws Exception {
@@ -34,7 +39,7 @@ public class CuratorDemo {
     }
 
     private static void updateData(CuratorFramework curatorFramework) throws Exception {
-        curatorFramework.setData().forPath("/test1","update".getBytes());
+        curatorFramework.setData().forPath("/test2/test2_1","update112".getBytes());
     }
 
     private static void deleteData(CuratorFramework curatorFramework) throws Exception {

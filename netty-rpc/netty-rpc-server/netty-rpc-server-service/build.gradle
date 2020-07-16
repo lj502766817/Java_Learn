@@ -11,6 +11,8 @@ dependencies{
             'org.springframework:spring-context:4.3.27.RELEASE',
             'org.apache.curator:curator-framework:5.1.0'
     )
+    compile group: 'org.apache.curator', name: 'curator-recipes', version: '5.1.0'
+
 }
 
 
