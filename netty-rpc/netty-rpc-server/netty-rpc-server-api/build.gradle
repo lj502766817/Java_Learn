@@ -7,7 +7,7 @@ archivesBaseName = 'netty-rpc-server-api'
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "file://C:\\Users\\lijia\\.m2\\repository")
+            repository(url: "file://D:\\dev\\.m2\\repository")
         }
     }
 }

@@ -30,8 +30,10 @@ public class CuratorDemo {
         curatorFramework.blockUntilConnected();
         System.out.println("成功连到zookeeper"+new Date());
 //        createData(curatorFramework);
-        updateData(curatorFramework);
+//        updateData(curatorFramework);
 //        deleteData(curatorFramework);
+        System.out.println("子节点:"+curatorFramework.getChildren().forPath("/test"));
+
     }
 
     private static void createData(CuratorFramework curatorFramework) throws Exception {

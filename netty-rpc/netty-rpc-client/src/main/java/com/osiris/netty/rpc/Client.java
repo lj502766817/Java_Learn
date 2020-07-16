@@ -14,9 +14,9 @@ public class Client {
         User user = new User();
         user.setAge(18);
         user.setName("lijia");
-        HelloService helloService = RpcProxy.getServcie(HelloService.class,"localhost",8080);
+        HelloService helloService = RpcProxy.getServcie(HelloService.class);
         helloService.sayHello(user);
-        MathService mathService = RpcProxy.getServcie(MathService.class,"localhost",8080);
+        MathService mathService = RpcProxy.getServcie(MathService.class);
         System.out.println(mathService.add(1,3));
         System.out.println(mathService.mult(11d,1.1d));
     }

@@ -9,8 +9,8 @@ import java.lang.reflect.Proxy;
  */
 public class RpcProxy {
 
-    public static <T> T getServcie(final Class<T> clazz, final String host, final Integer port){
-        return (T) Proxy.newProxyInstance(clazz.getClassLoader(),new Class<?>[]{clazz},new RpcClient(clazz,host,port));
+    public static <T> T getServcie(final Class<T> clazz){
+        return (T) Proxy.newProxyInstance(clazz.getClassLoader(),new Class<?>[]{clazz},new RpcClient(clazz));
     }
 
 }

@@ -1,11 +1,12 @@
 package com.osiris.netty.rpc;
 
+import com.osiris.netty.rpc.discover.DiscoverService;
+import com.osiris.netty.rpc.discover.DiscoverServiceWithZkImpl;
 import com.osiris.netty.rpc.dto.RpcRequest;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
@@ -23,15 +24,11 @@ import java.lang.reflect.Method;
  */
 public class RpcClient implements InvocationHandler {
 
-    private String host;
-
-    private Integer port;
-
     private Class clazz;
 
-    public RpcClient(Class clazz, String host, Integer port) {
-        this.host = host;
-        this.port = port;
+    private DiscoverService discoverService = new DiscoverServiceWithZkImpl();
+
+    public RpcClient(Class clazz) {
         this.clazz = clazz;
     }
 
@@ -77,7 +74,9 @@ public class RpcClient implements InvocationHandler {
                             pipeline.addLast(clientHandler);
                         }
                     });
-            ChannelFuture future = b.connect(host, port).sync();
+            String hostPort = discoverService.discoverHostPort(clazz.getName());
+            String[] hostPortValue = hostPort.split(":");
+            ChannelFuture future = b.connect(hostPortValue[0], Integer.parseInt(hostPortValue[1])).sync();
             future.channel().writeAndFlush(rpcRequest).sync();
             future.channel().closeFuture().sync();
         }finally {

@@ -1,6 +1,8 @@
 package com.osiris.netty.rpc;
 
 import com.osiris.netty.rpc.dto.RpcRequest;
+import com.osiris.netty.rpc.registry.RegistryCenter;
+import com.osiris.netty.rpc.registry.RegistryCenterWithZk;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -11,7 +13,6 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
-import io.netty.util.concurrent.EventExecutorGroup;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -19,6 +20,8 @@ import org.springframework.context.ApplicationContextAware;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,6 +33,8 @@ public class RpcRegisterCenter implements ApplicationContextAware, InitializingB
     private Integer port;
 
     private Map<String, Object> registerMap = new ConcurrentHashMap<>(16);
+
+    private RegistryCenter registryCenter = new RegistryCenterWithZk();
 
     public RpcRegisterCenter(Integer port) {
         this.port = port;
@@ -75,11 +80,25 @@ public class RpcRegisterCenter implements ApplicationContextAware, InitializingB
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         Map<String, Object> beans = applicationContext.getBeansWithAnnotation(RpcRegister.class);
+        String serviceAdress = getAdresss();
         for (Object bean : beans.values()) {
             String serviceName = bean.getClass().getInterfaces()[0].getName();
             registerMap.put(serviceName, bean);
+            registryCenter.registService(serviceName,serviceAdress+":"+port);
         }
-        System.out.println(registerMap.size()+"个服务已被注册");
+
+    }
+
+    /**
+     * 获得本机ip
+     */
+    private String getAdresss() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private class RegistryHandler extends ChannelInboundHandlerAdapter {
