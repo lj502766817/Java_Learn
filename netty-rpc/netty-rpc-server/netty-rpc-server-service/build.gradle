@@ -9,7 +9,8 @@ dependencies{
     implementation (
             'io.netty:netty-all:4.1.50.Final',
             'org.springframework:spring-context:4.3.27.RELEASE',
-            'org.apache.curator:curator-framework:5.1.0'
+            'org.apache.curator:curator-framework:5.1.0',
+            'com.101tec:zkclient:0.11'
     )
     compile group: 'org.apache.curator', name: 'curator-recipes', version: '5.1.0'
 
